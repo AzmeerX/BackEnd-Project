@@ -1,3 +1,4 @@
+// Create a custom class to send more generalised error messages
 class ApiError extends Error {
     constructor(
         statusCode,

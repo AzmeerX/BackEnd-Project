@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 
-app.use(cors({
+app.use(cors({ //Set which IP's are allowed to send requests to this backend. * means all can
     origin: process.env.CORS_ORIGIN
 }));
 
