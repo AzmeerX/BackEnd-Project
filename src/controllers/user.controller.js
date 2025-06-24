@@ -5,14 +5,14 @@ import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async (req, res) => {
-    const { fullName, email, username, password } = req.body
+    const { fullname, email, username, password } = req.body;
     
-    if(fullName === "") throw new ApiError(400, "Full name is required");
+    if(fullname === "") throw new ApiError(400, "Full name is required");
     if(username === "") throw new ApiError(400, "Username is required");
     if(password === "") throw new ApiError(400, "Password is required");
     if(email === "") throw new ApiError(400, "Email is required");
 
-    const existingUser = User.findOne({
+    const existingUser = await User.findOne({
         $or: [{ username }, { email }]
     });
 
@@ -29,7 +29,7 @@ const registerUser = asyncHandler( async (req, res) => {
     if(!avatar) throw new ApiError(400, "Avatar file is required");
 
     const user = await User.create({
-        fullName,
+        fullname,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email,
