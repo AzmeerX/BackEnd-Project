@@ -13,7 +13,7 @@ const uploadOnCloudinary = async (localFilePath) => { //takes a string as path a
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto" //takes all types of files, .png, .jpg, .pdf etc
         });
-        fs.unlinkSync(localFilePath);
+        fs.unlinkSync(localFilePath); // remove the file temporarily saved on server
         return response;
     } catch (error) {
         fs.unlinkSync(localFilePath); // if error remomve file from our server
