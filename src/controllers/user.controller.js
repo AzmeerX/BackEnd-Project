@@ -197,19 +197,19 @@ const updateProfile = asyncHandler(async (req, res) => {
         }
     ).select("-password -refreshToken");
 
-    if(!user) throw new ApiError(500, "Something went wrong");
+    if (!user) throw new ApiError(500, "Something went wrong");
 
     return res.status(200)
-    .json( new ApiResponse(200, user, "User Updated"));
+        .json(new ApiResponse(200, user, "User Updated"));
 });
 
 
 const updateAvatar = asyncHandler(async (req, res) => {
     const avatarFile = req.file.avatar.path;
-    if(!avatarFile) throw new ApiError(400, "Avatar is required");
+    if (!avatarFile) throw new ApiError(400, "Avatar is required");
 
     const avatar = await uploadOnCloudinary(avatarFile);
-    if(!avatar) throw new ApiError(500, "Error while uploading");
+    if (!avatar) throw new ApiError(500, "Error while uploading");
 
     const user = await User.findByIdAndUpdate(
         req.user._id,
@@ -223,19 +223,19 @@ const updateAvatar = asyncHandler(async (req, res) => {
         }
     ).select("-password -refreshToken");
 
-    if(!user) throw new ApiError(500, "Something went wrong");
+    if (!user) throw new ApiError(500, "Something went wrong");
 
     return res.status(200)
-    .json( new ApiResponse(200, user, "Avatar Changed Successfully"));
+        .json(new ApiResponse(200, user, "Avatar Changed Successfully"));
 });
 
 
 const updateCoverImage = asyncHandler(async (req, res) => {
     const coverImageFile = req.file.coverImage.path;
-    if(!coverImageFile) throw new ApiError(400, "Image is required");
+    if (!coverImageFile) throw new ApiError(400, "Image is required");
 
     const coverImage = await uploadOnCloudinary(coverImageFile);
-    if(!coverImage) throw new ApiError(500, "Error while uploading");
+    if (!coverImage) throw new ApiError(500, "Error while uploading");
 
     const user = await User.findByIdAndUpdate(
         req.user._id,
@@ -249,17 +249,17 @@ const updateCoverImage = asyncHandler(async (req, res) => {
         }
     ).select("-password -refreshToken");
 
-    if(!user) throw new ApiError(500, "Something went wrong");
+    if (!user) throw new ApiError(500, "Something went wrong");
 
     return res.status(200)
-    .json( new ApiResponse(200, user, "Profile Picture Changed Successfully"));
+        .json(new ApiResponse(200, user, "Profile Picture Changed Successfully"));
 });
 
 
 const getChannel = asyncHandler(async (req, res) => {
     const username = req.params;
 
-    if(!username?.trim()) throw new ApiError(400, "Username is required");
+    if (!username?.trim()) throw new ApiError(400, "Username is required");
 
     const channel = await User.aggregate([
         {
@@ -289,13 +289,13 @@ const getChannel = asyncHandler(async (req, res) => {
                     $size: "$subscribers"
                 },
                 subscribedToCount: {
-                    $size: "subscribedTo"
+                    $size: "$subscribedTo"
                 },
                 isSubscribed: {
                     $cond: {
                         if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
-                        else: true
+                        else: false
                     }
                 }
             }
@@ -314,10 +314,10 @@ const getChannel = asyncHandler(async (req, res) => {
         }
     ]);
 
-    if(!channel?.length) throw new ApiError(400, "Channel does not exist");
+    if (!channel?.length) throw new ApiError(400, "Channel does not exist");
 
     return res.status(200)
-    .json( new ApiResponse(200, channel[0], "User channel fetched"));
+        .json(new ApiResponse(200, channel[0], "User channel fetched"));
 });
 
 
@@ -365,7 +365,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     ]);
 
     return res.status(200)
-    .json( new ApiResponse(200, user[0].watchHistory, "Watch History fetched"));
+        .json(new ApiResponse(200, user[0].watchHistory, "Watch History fetched"));
 });
 
 
@@ -374,8 +374,8 @@ export {
     loginUser,
     logOutUser,
     refreshAccessToken,
-    changePassword, 
-    getUser, 
+    changePassword,
+    getUser,
     updateProfile,
     updateAvatar,
     updateCoverImage,
